@@ -1,0 +1,54 @@
+$(document).ready(function() {
+
+    BASE_URL = "http://www.omdbapi.com?";
+
+    // Detect the search button being clicked
+    $("#movie-search-button").on('click', function() {
+        // Get the title of the movie being searched. Encode the input field
+        // for use in the URL
+        var movieTitle = encodeURIComponent($('#movie-title').val());
+        var searchURL = BASE_URL + "s=" + movieTitle;
+        $.ajax({
+            type: "GET",
+            url: searchURL,
+            // If successful, the GET returns an object "Search" which contains
+            // an array of the movies that match the search criteria
+            success: function(movies) {
+                  // For each movie in the returned array, use the movie id
+                  // imdbID to find mroe details on that specific movie
+                  movies.Search.forEach(function(movie) {
+                      var movieID = movie.imdbID;
+                      var specificMovieURL = BASE_URL + "i=" + movieID;
+                      $.ajax({
+                          type: "GET",
+                          url: specificMovieURL,
+                          // If successful, the details for the speciic movie
+                          // is returned.
+                          // The next step is to display the movie details
+                          success: function(specificMovie) {
+                              console.log(specificMovie);
+                              var source = $("#movie-template").html();
+                              var movieTemplate = Handlebars.compile(source);
+                              var newHTML = movieTemplate(specificMovie);
+                              $('#movie-card-container').append(newHTML);
+                              $('#search-input-box').hide();
+                              $('.movie-card').show();
+                          },
+                          error: function() {
+                              alert("Unable to find movie ID " + movieID);
+                          }
+                      // End of GET for specific movie
+                      });
+                  });
+              // End of movies.forEach
+            },
+            error: function() {
+              alert("Unable to search for " + movieTitle);
+            }
+        // End of GET for all matching movies
+        });
+    // End of $("#movie-search-button").on('click')
+    });
+
+//End of $(document).ready
+});
