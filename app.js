@@ -26,7 +26,7 @@ $(document).ready(function() {
                           // is returned.
                           // The next step is to display the movie details
                           success: function(specificMovie) {
-                              console.log(specificMovie);
+                              //console.log(specificMovie);
                               var source = $("#movie-template").html();
                               var movieTemplate = Handlebars.compile(source);
                               var newHTML = movieTemplate(specificMovie);
@@ -45,10 +45,19 @@ $(document).ready(function() {
             error: function() {
               alert("Unable to search for " + movieTitle);
             }
-        // End of GET for all matching movies
         });
     // End of $("#movie-search-button").on('click')
     });
 
+    // Detect the search again button being clicked to return to the
+    // search dialogue box
+    // Detect the search button being clicked
+    // End of $("#movie-search-button").on('click'
+    });
+
+    $(document).on("click", "#search-again-button", function(event) {
+        event.preventDefault();
+        $('.movie-card').hide();
+        $('#search-input-box').show();
 //End of $(document).ready
 });
