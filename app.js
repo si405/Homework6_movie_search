@@ -57,7 +57,6 @@ $(document).ready(function() {
 
     $(document).on("click", "#search-again-button", function(event) {
         event.preventDefault();
-        $('.movie-card').hide();
-        $('#search-input-box').show();
+        location.reload();
 //End of $(document).ready
 });
