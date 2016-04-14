@@ -2,6 +2,12 @@ $(document).ready(function() {
 
     BASE_URL = "http://www.omdbapi.com?";
 
+    // Prepare the Handlebars template so that it is executed only once for
+    // performance improvements
+
+    var source = $("#movie-template").html();
+    var movieTemplate = Handlebars.compile(source);
+
     // Detect the search button being clicked
     $("#movie-search-button").on('click', function() {
         // Get the title of the movie being searched. Encode the input field
@@ -16,6 +22,7 @@ $(document).ready(function() {
             success: function(movies) {
                   // For each movie in the returned array, use the movie id
                   // imdbID to find mroe details on that specific movie
+                  $('#search-input-box').hide();
                   movies.Search.forEach(function(movie) {
                       var movieID = movie.imdbID;
                       var specificMovieURL = BASE_URL + "i=" + movieID;
@@ -27,11 +34,8 @@ $(document).ready(function() {
                           // The next step is to display the movie details
                           success: function(specificMovie) {
                               //console.log(specificMovie);
-                              var source = $("#movie-template").html();
-                              var movieTemplate = Handlebars.compile(source);
                               var newHTML = movieTemplate(specificMovie);
                               $('#movie-card-container').append(newHTML);
-                              $('#search-input-box').hide();
                               $('.movie-card').show();
                           },
                           error: function() {
